@@ -45,6 +45,16 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(name),
+        actions: [
+          // Add a search button to the AppBar
+          IconButton(
+            icon: const Icon(Icons.search),
+            onPressed: () {
+              // Navigate to the search screen
+              Navigator.pushNamed(context, '/search');
+            },
+          ),
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(

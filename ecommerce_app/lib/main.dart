@@ -7,7 +7,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:ecommerce_app/screens/auth_wrapper.dart';
 import 'package:ecommerce_app/providers/cart_provider.dart';
 import 'package:ecommerce_app/providers/theme_provider.dart';
-
+import 'package:ecommerce_app/screens/product_search.dart';  // Search Screen Import
+import 'package:ecommerce_app/screens/product_detail_screen.dart'; // Import ProductDetailScreen
 
 const Color kRichBlack = Color(0xFF1D1F24);
 const Color kBrown = Color(0xFF8B5E3C);
@@ -18,7 +19,6 @@ Future<void> main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
-  // Initialize Firebase
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -57,9 +57,7 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
         scaffoldBackgroundColor: kOffWhite,
-        textTheme: GoogleFonts.latoTextTheme(
-          Theme.of(context).textTheme,
-        ),
+        textTheme: GoogleFonts.latoTextTheme(),
       ),
       darkTheme: ThemeData(
         colorScheme: ColorScheme.fromSeed(
@@ -72,12 +70,25 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
         scaffoldBackgroundColor: Colors.black,
-        textTheme: GoogleFonts.latoTextTheme(
-          Theme.of(context).textTheme.apply(bodyColor: Colors.white),
-        ),
+        textTheme: GoogleFonts.latoTextTheme().apply(bodyColor: Colors.white),
       ),
-      themeMode: themeProvider.themeMode, // <- controlled by provider
-      home: const AuthWrapper(),
+      themeMode: themeProvider.themeMode,
+
+      // Define the routes for your screens here
+      routes: {
+        // Main Auth screen
+        '/': (context) => const AuthWrapper(),
+        // Search Screen Route
+        '/search': (context) => const ProductSearchScreen(),
+        // Product Detail Screen Route
+        '/product_detail': (context) {
+          final args = ModalRoute.of(context)!.settings.arguments as Map;
+          return ProductDetailScreen(
+            productData: args['productData'],
+            productID: args['productID'],
+          );
+        },
+      },
     );
   }
 }

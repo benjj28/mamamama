@@ -86,7 +86,7 @@ class _LoginScreenState extends State<LoginScreen> {
           Switch(
             value: themeProvider.themeMode == ThemeMode.dark,
             onChanged: (value) {
-              themeProvider.toggleTheme(value);
+              themeProvider.toggleTheme(value); // ← Switch works!
             },
           ),
         ],
@@ -119,8 +119,12 @@ class _LoginScreenState extends State<LoginScreen> {
                     border: OutlineInputBorder(),
                   ),
                   validator: (value) {
-                    if (value == null || value.isEmpty) return 'Please enter your password';
-                    if (value.length < 6) return 'Password must be at least 6 characters';
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your password';
+                    }
+                    if (value.length < 6) {
+                      return 'Password must be at least 6 characters';
+                    }
                     return null;
                   },
                 ),

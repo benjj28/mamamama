@@ -59,13 +59,19 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-
         title: Image.asset(
           'assets/images/app_logo.png',
           height: 40,
         ),
-
         actions: [
+          // Search button added here
+          IconButton(
+            icon: const Icon(Icons.search),
+            tooltip: 'Search',
+            onPressed: () {
+              Navigator.pushNamed(context, '/search');
+            },
+          ),
           Consumer<CartProvider>(
             builder: (context, cart, child) {
               return Badge(
@@ -121,7 +127,6 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         ],
       ),
-
       body: StreamBuilder<QuerySnapshot>(
         stream: FirebaseFirestore.instance
             .collection('products')
@@ -176,16 +181,20 @@ class _HomeScreenState extends State<HomeScreen> {
           );
         },
       ),
-
       floatingActionButton: _userRole == 'user'
           ? StreamBuilder<DocumentSnapshot>(
-        stream: _firestore.collection('chats').doc(_currentUser!.uid).snapshots(),
+        stream: _firestore
+            .collection('chats')
+            .doc(_currentUser!.uid)
+            .snapshots(),
         builder: (context, snapshot) {
           int unreadCount = 0;
           if (snapshot.hasData && snapshot.data!.exists) {
             final data = snapshot.data!.data();
             if (data != null) {
-              unreadCount = (data as Map<String, dynamic>)['unreadByUserCount'] ?? 0;
+              unreadCount =
+                  (data as Map<String, dynamic>)['unreadByUserCount'] ??
+                      0;
             }
           }
 
