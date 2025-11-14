@@ -35,7 +35,8 @@ class CartScreen extends StatelessWidget {
                       Text(
                           '₱${(cartItem.price * cartItem.quantity).toStringAsFixed(2)}'),
                       IconButton(
-                        icon: const Icon(Icons.delete, color: Colors.red),
+                        icon:
+                        const Icon(Icons.delete, color: Colors.red),
                         onPressed: () {
                           cart.removeItem(cartItem.id);
                         },
@@ -56,26 +57,35 @@ class CartScreen extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text('Subtotal:', style: TextStyle(fontSize: 16)),
-                      Text('₱${cart.subtotal.toStringAsFixed(2)}', style: const TextStyle(fontSize: 16)),
+                      const Text('Subtotal:',
+                          style: TextStyle(fontSize: 16)),
+                      Text('₱${cart.subtotal.toStringAsFixed(2)}',
+                          style: const TextStyle(fontSize: 16)),
                     ],
                   ),
                   const SizedBox(height: 8),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text('VAT (12%):', style: TextStyle(fontSize: 16)),
-                      Text('₱${cart.vat.toStringAsFixed(2)}', style: const TextStyle(fontSize: 16)),
+                      const Text('VAT (12%):',
+                          style: TextStyle(fontSize: 16)),
+                      Text('₱${cart.vat.toStringAsFixed(2)}',
+                          style: const TextStyle(fontSize: 16)),
                     ],
                   ),
                   const Divider(height: 20, thickness: 1),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      const Text('Total:', style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
+                      const Text('Total:',
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.bold)),
                       Text(
                         '₱${cart.totalPriceWithVat.toStringAsFixed(2)}',
-                        style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.deepPurple),
+                        style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.deepPurple),
                       ),
                     ],
                   ),
@@ -90,8 +100,11 @@ class CartScreen extends StatelessWidget {
               style: ElevatedButton.styleFrom(
                 minimumSize: const Size.fromHeight(50),
               ),
-              onPressed: cart.items.isEmpty ? null : () {
-                Navigator.of(context).push(
+              onPressed: cart.items.isEmpty
+                  ? null
+                  : () {
+                // Navigate to PaymentScreen and clear backstack after payment
+                Navigator.of(context).pushReplacement(
                   MaterialPageRoute(
                     builder: (context) => PaymentScreen(
                       totalAmount: cart.totalPriceWithVat,

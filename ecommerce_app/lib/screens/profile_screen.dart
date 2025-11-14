@@ -161,14 +161,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             const SizedBox(height: 40),
             const Divider(),
             const SizedBox(height: 20),
-
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.red[700],
-              ),
-              onPressed: _signOut,
-              child: const Text('Log Out'),
-            ),
           ],
         ),
       ),

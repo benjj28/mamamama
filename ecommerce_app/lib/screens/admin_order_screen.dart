@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-
 class AdminOrderScreen extends StatefulWidget {
   const AdminOrderScreen({super.key});
 
@@ -18,7 +17,6 @@ class _AdminOrderScreenState extends State<AdminOrderScreen> {
       await _firestore.collection('orders').doc(orderId).update({
         'status': newStatus,
       });
-
 
       await _firestore.collection('notifications').add({
         'userId': userId,
@@ -40,6 +38,7 @@ class _AdminOrderScreenState extends State<AdminOrderScreen> {
     }
   }
 
+  // --- UPDATED _showStatusDialog FUNCTION ---
   void _showStatusDialog(String orderId, String currentStatus, String userId) {
     showDialog(
       context: context,
@@ -56,14 +55,15 @@ class _AdminOrderScreenState extends State<AdminOrderScreen> {
                 trailing: currentStatus == status ? const Icon(Icons.check) : null,
                 onTap: () {
                   _updateOrderStatus(orderId, status, userId);
-                  Navigator.of(dialogContext).pop();
+                  // Use 'dialogContext' to pop the dialog
+                  Navigator.of(dialogContext).pop(); // FIXED
                 },
               );
             }).toList(),
           ),
           actions: [
             TextButton(
-              onPressed: () => Navigator.of(dialogContext).pop(),
+              onPressed: () => Navigator.of(dialogContext).pop(), // FIXED: Use 'dialogContext' to pop
               child: const Text('Close'),
             )
           ],
@@ -78,13 +78,11 @@ class _AdminOrderScreenState extends State<AdminOrderScreen> {
       appBar: AppBar(
         title: const Text('Manage Orders'),
       ),
-
       body: StreamBuilder<QuerySnapshot>(
         stream: _firestore
             .collection('orders')
             .orderBy('createdAt', descending: true)
             .snapshots(),
-
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const Center(child: CircularProgressIndicator());
@@ -103,6 +101,8 @@ class _AdminOrderScreenState extends State<AdminOrderScreen> {
             itemBuilder: (context, index) {
               final order = orders[index];
               final orderData = order.data() as Map<String, dynamic>;
+
+              // --- NULL-SAFE DATA HANDLING ---
               final Timestamp? timestamp = orderData['createdAt'];
               final String formattedDate = timestamp != null
                   ? DateFormat('MM/dd/yyyy hh:mm a').format(timestamp.toDate())
@@ -111,6 +111,7 @@ class _AdminOrderScreenState extends State<AdminOrderScreen> {
               final double totalPrice = (orderData['totalPrice'] ?? 0.0) as double;
               final String formattedTotal = '₱${totalPrice.toStringAsFixed(2)}';
               final String userId = orderData['userId'] ?? 'Unknown User';
+              // --- END OF NULL-SAFE DATA HANDLING ---
 
               return Card(
                 margin: const EdgeInsets.all(8.0),

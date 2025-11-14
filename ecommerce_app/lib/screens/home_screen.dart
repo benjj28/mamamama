@@ -47,9 +47,17 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  // Updated sign-out function to clear the navigation stack
   Future<void> _signOut() async {
     try {
-      await FirebaseAuth.instance.signOut();
+      await FirebaseAuth.instance.signOut(); // Sign out from Firebase
+
+      // Clear the navigation stack and go to the login screen
+      Navigator.pushNamedAndRemoveUntil(
+        context,
+        '/login', // Ensure '/login' is the correct route for your login screen
+            (route) => false, // This removes all previous routes from the stack
+      );
     } catch (e) {
       print('Error signing out: $e');
     }
@@ -64,7 +72,6 @@ class _HomeScreenState extends State<HomeScreen> {
           height: 40,
         ),
         actions: [
-          // Search button added here
           IconButton(
             icon: const Icon(Icons.search),
             tooltip: 'Search',
@@ -124,6 +131,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               );
             },
+          ),
+          // Add logout button here
+          IconButton(
+            icon: const Icon(Icons.logout),
+            tooltip: 'Logout',
+            onPressed: _signOut, // Logout on button press
           ),
         ],
       ),

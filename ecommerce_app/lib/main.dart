@@ -7,8 +7,9 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:ecommerce_app/screens/auth_wrapper.dart';
 import 'package:ecommerce_app/providers/cart_provider.dart';
 import 'package:ecommerce_app/providers/theme_provider.dart';
-import 'package:ecommerce_app/screens/product_search.dart';  // Search Screen Import
-import 'package:ecommerce_app/screens/product_detail_screen.dart'; // Import ProductDetailScreen
+import 'package:ecommerce_app/screens/product_search.dart';
+import 'package:ecommerce_app/screens/product_detail_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 const Color kRichBlack = Color(0xFF1D1F24);
 const Color kBrown = Color(0xFF8B5E3C);
@@ -23,13 +24,20 @@ Future<void> main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
+  await FirebaseAuth.instance.setPersistence(Persistence.LOCAL);
+
+  final cartProvider = CartProvider();
+  cartProvider.initializeAuthListener();
+
   runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => CartProvider()),
-        ChangeNotifierProvider(create: (_) => ThemeProvider()),
-      ],
-      child: const MyApp(),
+    ChangeNotifierProvider.value(
+      value: cartProvider,
+      child: MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ],
+        child: const MyApp(),
+      ),
     ),
   );
 
@@ -74,13 +82,9 @@ class MyApp extends StatelessWidget {
       ),
       themeMode: themeProvider.themeMode,
 
-      // Define the routes for your screens here
       routes: {
-        // Main Auth screen
         '/': (context) => const AuthWrapper(),
-        // Search Screen Route
         '/search': (context) => const ProductSearchScreen(),
-        // Product Detail Screen Route
         '/product_detail': (context) {
           final args = ModalRoute.of(context)!.settings.arguments as Map;
           return ProductDetailScreen(
@@ -88,6 +92,12 @@ class MyApp extends StatelessWidget {
             productID: args['productID'],
           );
         },
+      },
+
+      onUnknownRoute: (settings) {
+        return MaterialPageRoute(
+          builder: (context) => const AuthWrapper(),
+        );
       },
     );
   }

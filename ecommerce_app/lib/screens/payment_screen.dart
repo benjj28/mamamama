@@ -25,15 +25,16 @@ class _PaymentScreenState extends State<PaymentScreen> {
     });
 
     try {
-      await Future.delayed(const Duration(seconds: 3));
+      await Future.delayed(const Duration(seconds: 3)); // Simulating payment process
       final cartProvider = Provider.of<CartProvider>(context, listen: false);
-      await cartProvider.placeOrder();
-      await cartProvider.clearCart();
+      await cartProvider.placeOrder();  // Place the order
+      await cartProvider.clearCart();  // Clear the cart after payment
 
       if (mounted) {
+        // After payment success, navigate to the order success screen
         Navigator.of(context).pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => const OrderSuccessScreen()),
-              (route) => false,
+              (route) => false, // Remove all previous routes
         );
       }
     } catch (e) {
@@ -48,7 +49,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
       }
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -103,7 +103,6 @@ class _PaymentScreenState extends State<PaymentScreen> {
                 });
               },
             ),
-
 
             RadioListTile<PaymentMethod>(
               title: const Text('Bank Transfer'),
