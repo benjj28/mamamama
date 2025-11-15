@@ -29,6 +29,8 @@ Future<void> main() async {
   final cartProvider = CartProvider();
   cartProvider.initializeAuthListener();
 
+  FlutterNativeSplash.remove();
+
   runApp(
     ChangeNotifierProvider.value(
       value: cartProvider,
@@ -40,8 +42,6 @@ Future<void> main() async {
       ),
     ),
   );
-
-  FlutterNativeSplash.remove();
 }
 
 class MyApp extends StatelessWidget {
@@ -81,7 +81,6 @@ class MyApp extends StatelessWidget {
         textTheme: GoogleFonts.latoTextTheme().apply(bodyColor: Colors.white),
       ),
       themeMode: themeProvider.themeMode,
-
       routes: {
         '/': (context) => const AuthWrapper(),
         '/search': (context) => const ProductSearchScreen(),
@@ -93,7 +92,6 @@ class MyApp extends StatelessWidget {
           );
         },
       },
-
       onUnknownRoute: (settings) {
         return MaterialPageRoute(
           builder: (context) => const AuthWrapper(),
